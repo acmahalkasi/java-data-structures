@@ -38,6 +38,7 @@ public class DoubleLinkedList {
         } else {
             Node currNode = getLast();
             currNode.nextNode = node;
+            node.prevNode = currNode;
         }
         this.size++;
         System.out.printf("%d is inserted at index %d\n", data, size - 1);
@@ -55,14 +56,14 @@ public class DoubleLinkedList {
         Node node = new Node(data);
         Node prevNode = get(index - 1);
 
-        if (prevNode == null) {
+        if (prevNode == null) { //which means prevNode is the new head
             Node prevHead = this.head;
             this.head = node;
             this.head.nextNode = prevHead;
         } else {
-            Node currNode = get(index);
+            node.nextNode = prevNode.nextNode;
             prevNode.nextNode = node;
-            node.nextNode = currNode;
+            node.prevNode = prevNode;
         }
 
         this.size++;
@@ -81,7 +82,7 @@ public class DoubleLinkedList {
 
     void set(int index, Node node) {
         Node currNode = get(index);
-        Node prevNode = get(index - 1);
+        Node prevNode = currNode.prevNode;
 
         prevNode.nextNode = node;
         currNode.data = node.data;
@@ -130,15 +131,18 @@ public class DoubleLinkedList {
         if (currNode == null)
             return false;
 
-        Node prevNode = get(index - 1);
+        Node prevNode = currNode.prevNode;
         if (prevNode == null) {
             this.head.data = null;
             this.head = this.head.nextNode;
             return true;
-        } else {
+        } else { // 1 2 x 3
             prevNode.nextNode = currNode.nextNode;
+            if (currNode.nextNode != null)
+                currNode.nextNode.prevNode = prevNode;
             currNode.data = null;
             currNode.nextNode = null;
+            currNode.prevNode = null;
         }
         System.out.printf("Index %d is freed\n", index);
         this.size--;
@@ -167,6 +171,7 @@ public class DoubleLinkedList {
             Node temp = node.nextNode;
             node.data = null;
             node.nextNode = null;
+            node.prevNode = null;
             node = temp;
         }
         this.size = 0;
@@ -189,23 +194,24 @@ public class DoubleLinkedList {
     //todo search
 
     public static void main(String[] args) {
-        DoubleLinkedList singlyLinkedList = new DoubleLinkedList();
-        singlyLinkedList.add(1);
-        singlyLinkedList.add(2);
-        singlyLinkedList.add(2, 100);
-        singlyLinkedList.add(3);
+        DoubleLinkedList doubleLinkedList = new DoubleLinkedList();
+        doubleLinkedList.add(1);
+        doubleLinkedList.add(2);
+        doubleLinkedList.add(2, 100);
+        doubleLinkedList.add(3);
         //System.out.println(singlyLinkedList.hasNext(2));
-        singlyLinkedList.add(4);
-        singlyLinkedList.search(100);
-        singlyLinkedList.search(200);
+        doubleLinkedList.add(4);
+        doubleLinkedList.search(100);
+        doubleLinkedList.search(200);
         //System.out.println(singlyLinkedList.hasNext(4));
         //singlyLinkedList.print();
         //singlyLinkedList.clear();
         //System.out.println(singlyLinkedList.hasNext(1));
         //singlyLinkedList.print();
-        singlyLinkedList.set(0, 1000);
-        singlyLinkedList.delete(2);
-        singlyLinkedList.print();
+        doubleLinkedList.set(0, 1000);
+        doubleLinkedList.delete(2);
+        doubleLinkedList.delete(doubleLinkedList.size-1);
+        doubleLinkedList.print();
     }
 
 

@@ -1,9 +1,6 @@
 package datastructures.list;
 
-import java.io.LineNumberReader;
-import java.util.LinkedList;
-
-public class SinglyLinkedList {
+public class SingleLinkedList {
 
     static class Node {
         Integer data;
@@ -25,10 +22,10 @@ public class SinglyLinkedList {
     private Node head;
     private int size;
 
-    public SinglyLinkedList() {
+    public SingleLinkedList() {
     }
 
-    public SinglyLinkedList(Node head) {
+    public SingleLinkedList(Node head) {
         this.head = head;
     }
 
@@ -188,23 +185,23 @@ public class SinglyLinkedList {
     }
 
     public static void main(String[] args) {
-        SinglyLinkedList singlyLinkedList = new SinglyLinkedList();
-        singlyLinkedList.add(1);
-        singlyLinkedList.add(2);
-        singlyLinkedList.add(2, 100);
-        singlyLinkedList.add(3);
+        SingleLinkedList singleLinkedList = new SingleLinkedList();
+        singleLinkedList.add(1);
+        singleLinkedList.add(2);
+        singleLinkedList.add(2, 100);
+        singleLinkedList.add(3);
         //System.out.println(singlyLinkedList.hasNext(2));
-        singlyLinkedList.add(4);
-        singlyLinkedList.search(100);
-        singlyLinkedList.search(200);
+        singleLinkedList.add(4);
+        singleLinkedList.search(100);
+        singleLinkedList.search(200);
         //System.out.println(singlyLinkedList.hasNext(4));
         //singlyLinkedList.print();
         //singlyLinkedList.clear();
         //System.out.println(singlyLinkedList.hasNext(1));
         //singlyLinkedList.print();
-        singlyLinkedList.set(0, 1000);
-        singlyLinkedList.delete(2);
-        singlyLinkedList.print();
+        singleLinkedList.set(0, 1000);
+        singleLinkedList.delete(2);
+        singleLinkedList.print();
     }
 
 
