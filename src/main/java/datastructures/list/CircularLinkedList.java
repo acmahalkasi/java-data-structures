@@ -35,9 +35,14 @@ public class CircularLinkedList {
         Node node = new Node(data);
         if (size == 0) {
             this.head = node;
+            node.nextNode = node;
+            node.prevNode = node;
         } else {
-            Node currNode = getLast();
+            Node currNode = head.prevNode;
             currNode.nextNode = node;
+            node.prevNode = currNode;
+            node.nextNode = head;
+            head.prevNode = node;
         }
         this.size++;
         System.out.printf("%d is inserted at index %d\n", data, size - 1);
@@ -51,19 +56,13 @@ public class CircularLinkedList {
             add(data);
             return;
         }
-
+        // 1 2 x 3
         Node node = new Node(data);
         Node prevNode = get(index - 1);
 
-        if (prevNode == null) {
-            Node prevHead = this.head;
-            this.head = node;
-            this.head.nextNode = prevHead;
-        } else {
-            Node currNode = get(index);
-            prevNode.nextNode = node;
-            node.nextNode = currNode;
-        }
+        node.prevNode = prevNode;
+        node.nextNode = prevNode.nextNode;
+        prevNode.nextNode = node;
 
         this.size++;
         System.out.printf("%d is inserted at index %d\n", data, index);
@@ -81,7 +80,7 @@ public class CircularLinkedList {
 
     void set(int index, Node node) {
         Node currNode = get(index);
-        Node prevNode = get(index - 1);
+        Node prevNode = currNode.prevNode;
 
         prevNode.nextNode = node;
         currNode.data = node.data;
@@ -126,20 +125,23 @@ public class CircularLinkedList {
     }
 
     boolean delete(int index) {
+        if (size == 0)
+            return false;
+
         Node currNode = get(index);
         if (currNode == null)
             return false;
 
-        Node prevNode = get(index - 1);
-        if (prevNode == null) {
-            this.head.data = null;
-            this.head = this.head.nextNode;
-            return true;
+        Node prevNode = currNode.prevNode;
+        // 1 2 3
+        if (prevNode == currNode) {
+            this.head = null;
         } else {
             prevNode.nextNode = currNode.nextNode;
-            currNode.data = null;
-            currNode.nextNode = null;
+            currNode.nextNode.prevNode = prevNode;
+            currNode = null;
         }
+
         System.out.printf("Index %d is freed\n", index);
         this.size--;
         return true;
@@ -167,6 +169,7 @@ public class CircularLinkedList {
             Node temp = node.nextNode;
             node.data = null;
             node.nextNode = null;
+            node.prevNode = null;
             node = temp;
         }
         this.size = 0;
@@ -189,23 +192,24 @@ public class CircularLinkedList {
     //todo search
 
     public static void main(String[] args) {
-        CircularLinkedList singlyLinkedList = new CircularLinkedList();
-        singlyLinkedList.add(1);
-        singlyLinkedList.add(2);
-        singlyLinkedList.add(2, 100);
-        singlyLinkedList.add(3);
+        var circularLinkedList = new CircularLinkedList();
+        circularLinkedList.add(1);
+        circularLinkedList.add(2);
+        circularLinkedList.add(2, 100);
+        circularLinkedList.add(3);
         //System.out.println(singlyLinkedList.hasNext(2));
-        singlyLinkedList.add(4);
-        singlyLinkedList.search(100);
-        singlyLinkedList.search(200);
+        circularLinkedList.add(4);
+        circularLinkedList.search(100);
+        circularLinkedList.search(200);
         //System.out.println(singlyLinkedList.hasNext(4));
         //singlyLinkedList.print();
         //singlyLinkedList.clear();
         //System.out.println(singlyLinkedList.hasNext(1));
         //singlyLinkedList.print();
-        singlyLinkedList.set(0, 1000);
-        singlyLinkedList.delete(2);
-        singlyLinkedList.print();
+        circularLinkedList.set(0, 1000); // 1000 2 3 4
+        circularLinkedList.delete(2);
+        circularLinkedList.delete(circularLinkedList.size-1);
+        circularLinkedList.print();
     }
 
 
